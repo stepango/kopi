@@ -5,9 +5,6 @@ import android.graphics.Color.*
 import android.support.annotation.FloatRange
 import java.lang.Math.round
 
-/**
- * Created by stepangoncarov on 21/05/16.
- */
 fun interpColor(@FloatRange(from = 0.0, to = 1.0) unit: Float, colors: IntArray): Int {
     if (unit <= 0) {
         return colors[0];

@@ -2,8 +2,11 @@ package com.stepango.colorpicker
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
 import android.graphics.Color.*
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.Shader
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -16,33 +19,44 @@ class ColorPicker @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     val colors = intArrayOf(RED, GREEN, BLUE)
+    val strokeSize = 2 * context.resources.displayMetrics.density
     val rainbowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP)
+        style = Paint.Style.STROKE
+        strokeCap = Paint.Cap.ROUND
+    }
+    val rainbowBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = WHITE
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
     }
     val pickPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     var pick = 0.5f
-    var path = Path()
-    var verticalGridSize: Int = 0
-    var rainbowBaseline: Int = 0
-    var showPreview: Boolean = false
+    var verticalGridSize = 0f
+    var rainbowBaseline = 0f
+    var showPreview = false
     var listener: OnColorChangedListener? = null
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawPath(path, rainbowPaint)
-        val color = color
-        drawColorAim(canvas, rainbowBaseline, verticalGridSize / 2, verticalGridSize * 0.5f, color)
+        drawPicker(canvas)
+        drawColorAim(canvas, rainbowBaseline, verticalGridSize.toInt() / 2, verticalGridSize * 0.5f, color)
         if (showPreview) {
             drawColorAim(canvas, verticalGridSize, (verticalGridSize / 1.4f).toInt(), verticalGridSize * 0.7f, color)
         }
     }
 
-    private fun drawColorAim(canvas: Canvas, baseLine: Int, offset: Int, size: Float, color: Int) {
-        pickPaint.color = Color.WHITE
-        canvas.drawCircle(offset + pick * (canvas.width - offset * 2), baseLine.toFloat(), size, pickPaint)
-        pickPaint.color = color
-        canvas.drawCircle(offset + pick * (canvas.width - offset * 2), baseLine.toFloat(), size * 0.9f, pickPaint)
+    private fun drawPicker(canvas: Canvas) {
+        val lineX = verticalGridSize / 2f
+        val lineY = rainbowBaseline.toFloat()
+        rainbowPaint.strokeWidth = verticalGridSize / 1.5f + strokeSize
+        rainbowBackgroundPaint.strokeWidth = rainbowPaint.strokeWidth + strokeSize
+        canvas.drawLine(lineX, lineY, width - lineX, lineY, rainbowBackgroundPaint)
+        canvas.drawLine(lineX, lineY, width - lineX, lineY, rainbowPaint)
+    }
+
+    private fun drawColorAim(canvas: Canvas, baseLine: Float, offset: Int, size: Float, color: Int) {
+        val circleCenterX = offset + pick * (canvas.width - offset * 2)
+        canvas.drawCircle(circleCenterX, baseLine, size, pickPaint.apply { this.color = WHITE })
+        canvas.drawCircle(circleCenterX, baseLine, size - strokeSize, pickPaint.apply { this.color = color })
     }
 
     @SuppressLint("DrawAllocation")
@@ -58,16 +72,9 @@ class ColorPicker @JvmOverloads constructor(
                 colors,
                 null,
                 Shader.TileMode.CLAMP)
-        verticalGridSize = height / 3
+        verticalGridSize = height / 3f
         rainbowPaint.shader = shader
-        rainbowPaint.strokeWidth = verticalGridSize / 1.5f
-
-        // central grid is for rainbow
-
-        val lineX = verticalGridSize / 2
-        rainbowBaseline = verticalGridSize / 2 + verticalGridSize * 2
-        path.moveTo(lineX.toFloat(), rainbowBaseline.toFloat())
-        path.lineTo((width - lineX).toFloat(), rainbowBaseline.toFloat())
+        rainbowBaseline = verticalGridSize / 2f + verticalGridSize * 2
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -79,9 +86,7 @@ class ColorPicker @JvmOverloads constructor(
             } else if (pick > 1) {
                 pick = 1f
             }
-            if (listener != null) {
-                listener!!.onColorChanged(color)
-            }
+            listener?.onColorChanged(color)
             showPreview = true
         } else if (action == MotionEvent.ACTION_UP) {
             showPreview = false
