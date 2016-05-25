@@ -71,7 +71,8 @@ class ColorPicker @JvmOverloads constructor(
                 height / 2.0f,
                 colors,
                 null,
-                Shader.TileMode.CLAMP)
+                Shader.TileMode.CLAMP
+        )
         verticalGridSize = height / 3f
         rainbowPaint.shader = shader
         rainbowBaseline = verticalGridSize / 2f + verticalGridSize * 2
