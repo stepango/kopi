@@ -7,28 +7,23 @@ import android.support.annotation.NonNull
 import java.lang.Math.round
 
 fun interpColor(@FloatRange(from = 0.0, to = 1.0) unit: Float, @NonNull colors: IntArray): Int {
-    if (unit <= 0) {
-        return colors[0];
-    }
-    if (unit >= 1) {
-        return colors[colors.size - 1];
-    }
+    if (unit <= 0) return colors[0]
+    if (unit >= 1) return colors[colors.size - 1]
 
-    var p = unit * (colors.size - 1);
-
-    val i = p.toInt();
+    var p = unit * (colors.size - 1)
+    val i = p.toInt()
     // take fractional part
-    p -= i;
+    p -= i
 
-    val c0 = colors[i];
-    val c1 = colors[i + 1];
+    val c0 = colors[i]
+    val c1 = colors[i + 1]
     // Calculates each channel separately
-    val a = avg(alpha(c0), alpha(c1), p);
-    val r = avg(red(c0), red(c1), p);
-    val g = avg(green(c0), green(c1), p);
-    val b = avg(blue(c0), blue(c1), p);
+    val a = avg(alpha(c0), alpha(c1), p)
+    val r = avg(red(c0), red(c1), p)
+    val g = avg(green(c0), green(c1), p)
+    val b = avg(blue(c0), blue(c1), p)
 
-    return Color.argb(a, r, g, b);
+    return Color.argb(a, r, g, b)
 }
 
 /**
