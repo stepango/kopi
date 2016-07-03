@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,6 +12,19 @@
     tools:context="com.stepango.colorpicker.MainActivity">
 
     <com.stepango.colorpicker.ColorPicker
+        android:id="@+id/picker"
         android:layout_width="match_parent"
-        android:layout_height="64dp"/>
+        android:layout_height="64dp"
+        app:picker_bgColor="#AAAAAA"
+        app:picker_pallet="@array/colors"
+        app:picker_strokeSize="2dp"/>
+
+    <com.stepango.colorpicker.RainbowTextView
+        android:layout_below="@id/picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="32dp"
+        android:textStyle="italic"
+        android:text="BANDLAB"/>
+
 </RelativeLayout>

@@ -16,7 +16,7 @@ class RainbowTextView @JvmOverloads constructor(
 
     var shader: Shader? = null
     val shaderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP);
+        xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -25,7 +25,7 @@ class RainbowTextView @JvmOverloads constructor(
         val width = measuredWidth.toFloat()
         val shader = LinearGradient(
                 0f, 0f, width, height,
-                intArrayOf(Color.WHITE, Color.YELLOW, Color.GREEN),
+                intArrayOf(Color.RED, Color.BLUE, Color.GREEN),
                 null,
                 Shader.TileMode.CLAMP
         )

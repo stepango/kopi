@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ColorPicker">
+        <attr name="picker_bgColor" format="color"/>
+        <attr name="picker_aimBgColor" format="color"/>
+        <attr name="picker_showPreview" format="boolean"/>
+        <attr name="picker_radius" format="dimension"/>
+        <attr name="picker_pickRadius" format="dimension"/>
+        <attr name="picker_previewRadius" format="dimension"/>
+        <attr name="picker_baseline" format="dimension"/>
+        <attr name="picker_previewBaseline" format="dimension"/>
+        <attr name="picker_pallet" format="reference"/>
+        <attr name="picker_strokeSize" format="dimension"/>
+        <attr name="picker_strokeColor" format="color"/>
+    </declare-styleable>
+</resources>
